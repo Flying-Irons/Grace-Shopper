@@ -14,13 +14,13 @@ router.post('/login', async (req, res, next) => {
       console.log('Incorrect password for user:', req.body.email)
       res.status(401).send('Wrong username and/or password')
     } else {
-      console.log('GIMMME USER', user)
-
-      console.log('set session Id to user Id', req.session)
-      const allCarts = await Cart.findAll()
-      const ourCart = allCarts.filter(cart => cart.userId === user.id)
-      if (!ourCart) {
-        //make a post request to Cart and make a cart instance
+      const activeUserCart = await Cart.findOne({
+        where: {
+          userId: user.id
+        }
+      })
+      // const ourCart = allCarts.filter(cart => cart.userId === user.id)
+      if (!activeUserCart) {
         await Cart.create({userId: user.id})
       } else {
         //since there's already a cart, dispatch to session
@@ -28,11 +28,10 @@ router.post('/login', async (req, res, next) => {
         // const cart = await Cart.findOne({
         //   where: {userId: user.id, purchased: false}
         // })
-        const cartProducts = await CartProducts.findAll({
-          where: {cartId: ourCart[0].id}
+        const activeUsersProducts = await CartProducts.findAll({
+          where: {cartId: activeUserCart.id}
         })
-        console.log(cartProducts)
-        res.send(cartProducts)
+        res.send(activeUsersProducts)
       }
       req.login(user, err => (err ? next(err) : res.json(user)))
     }

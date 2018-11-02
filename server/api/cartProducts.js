@@ -31,6 +31,7 @@ router.post('/session', (req, res, next) => {
     next(err)
   }
 })
+//as
 
 router.post('/', async (req, res, next) => {
   try {
@@ -57,7 +58,6 @@ router.get('/:cartId', async (req, res, next) => {
   }
 })
 
-
 router.post('/', async (req, res, next) => {
   try {
     const newCartProduct = await CartProduct.create({
@@ -72,7 +72,6 @@ router.post('/', async (req, res, next) => {
   }
 })
 
-
 router.put('/:productId', async (req, res, next) => {
   try {
     const toBeModified = await CartProduct.findOne({
@@ -80,7 +79,6 @@ router.put('/:productId', async (req, res, next) => {
     })
 
     const updated = await toBeModified.update({
-
       productId: toBeModified.productId,
       cartId: toBeModified.cartId,
       quantity: req.body.quantity

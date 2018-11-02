@@ -1,7 +1,7 @@
 import axios from 'axios'
 
 /**
- * ACTION TYPESdkfj
+ * ACTION TYPES
  */
 const GET_CART_PRODUCTS = 'GET_CART_PRODUCTS'
 const ADD_TO_CART = 'ADD_TO_CART'
@@ -10,7 +10,7 @@ const GET_SESSION_CART_ID = 'GET_SESSION_CART_ID'
 /**
  * INITIAL STATE
  */
-const initialState = {products: [], sessionCartId: 0}
+const initialState = {products: [], sessioncartId: 0}
 
 /**
  * ACTION CREATORS
@@ -24,16 +24,15 @@ const getSessionCartId = cartId => ({type: GET_SESSION_CART_ID, cartId})
  HELPING FUNCTIONS
  */
 
-const makeCartandAddProduct = async (productId, dispatch) => {
-  console.log('case 1: make cart')
+const makeCartandAddProduct = async (productId, cart, dispatch) => {
   const newCartResponse = await axios.post('/api/carts', {}) //instantiate a new cart
   const currentCart = newCartResponse.data
-  // console.log('got here', currentCart)
+  console.log('got here', currentCart)
   await axios.post('/api/cartProducts/session', {
     cartId: currentCart.id
   })
   const session = await axios.get('/api/cartProducts/session')
-  // console.log('updated session unique123', session.data)
+
   dispatch(getSessionCartId(session.data.cartId))
   const newProductInCartResponse = await axios.post('/api/cartProducts', {
     productId,
@@ -59,7 +58,6 @@ const justAddProductToExistingCart = async (
     })
 
     if (existingCartProduct.length) {
-      console.log('case 2b: existing product, up quantitiy')
       //If product exists, update cartProduct quantity
       const updated = await axios.put(`/api/cartProducts/${productId}`, {
         quantity: existingCartProduct[0].quantity + 1
@@ -67,11 +65,10 @@ const justAddProductToExistingCart = async (
 
       dispatch(updateCart(updated.data))
     } else {
-      console.log('case 2a: new product in existing cart')
       //If product doesn't exist, make a new cartProduct
       const newProductInCartResponse = await axios.post('/api/cartProducts', {
         productId,
-        cartId: sessionCartId.cartId,
+        cartId: .cartId,
         quantity: 1
       })
       const newProductInCart = newProductInCartResponse.data
@@ -103,18 +100,15 @@ export const getCartProductsThunk = cartId => {
 /*------- If there is no id in the session, make a cart and add a product in it.
 Otherwise, add the product to existing cart,  --------*/
 export const addToCartButtonThunk = (productId, cart) => {
-  console.log('cartProducts araray', cart)
   return async dispatch => {
     try {
-    const sessionCartIdObj = await axios.get('/api/cartProducts/session')
-    const sessionCartId = sessionCartIdObj.data
-    if (!sessionCartId.cartId) {
-
-      makeCartandAddProduct(productId, dispatch)
-    } else {
-      dispatch(getSessionCartId(sessionCartId.cartId))
-      justAddProductToExistingCart(productId, cart, dispatch, sessionCartId)
-    }
+      const sessionCartIdObj = await axios.get('/api/cartProducts/session')
+      const sessionCartId = sessionCartIdObj.data
+      if (!sessionCartId.cartId) {
+        makeCartandAddProduct(productId, cart, dispatch)
+      } else {
+        justAddProductToExistingCart(productId, cart, dispatch, sessionCartId)
+      }
     } catch (err) {
       console.log(err)
     }
@@ -129,10 +123,8 @@ const CartReducer = (state = initialState, action) => {
   switch (action.type) {
     case GET_CART_PRODUCTS:
       return {...state, products: action.products}
-    // return [...state, action.products]
     case ADD_TO_CART:
       return {...state, products: [...state.products, action.product]}
-    // return [...state, action.product]
     case UPDATE_CART:
       const copy = [
         ...state.products.filter(el => {
