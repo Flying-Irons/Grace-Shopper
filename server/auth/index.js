@@ -14,25 +14,32 @@ router.post('/login', async (req, res, next) => {
       console.log('Incorrect password for user:', req.body.email)
       res.status(401).send('Wrong username and/or password')
     } else {
-      console.log('GIMMME USER', user)
-
-      console.log('set session Id to user Id', req.session)
+      // console.log('set session Id to user Id', req.session)
       const allCarts = await Cart.findAll()
-      const ourCart = allCarts.filter(cart => cart.userId === user.id)
-      if (!ourCart) {
-        //make a post request to Cart and make a cart instance
-        await Cart.create({userId: user.id})
+      const activeCart = allCarts.filter(cart => cart.userId === user.id)
+      req.session.loggedIn = true
+
+      console.log('activeCart 453', activeCart)
+      if (!activeCart.length) {
+        //new cart intance if there are no preexisting carts for logged in user
+        const newCart = await Cart.create({userId: user.id})
+        console.log('cart created for logged in user:', newCart)
+        req.session.cartId = newCart.id
+        // req.session.cartId = req.session.user
       } else {
         //since there's already a cart, dispatch to session
         // req.session.cartId = user.cartId not working yet, plan is:
         // const cart = await Cart.findOne({
         //   where: {userId: user.id, purchased: false}
         // })
-        const cartProducts = await CartProducts.findAll({
-          where: {cartId: ourCart[0].id}
+        const currentSessionCart = await Cart.findAll({
+          where: {id: activeCart[0].id}
         })
-        console.log(cartProducts)
-        res.send(cartProducts)
+        console.log('preexisting cart, carts queried:', currentSessionCart)
+        req.session.cartId =
+          currentSessionCart[currentSessionCart.length - 1].id
+        // console.log(cartProducts)
+        // res.send(cartProducts)
       }
       req.login(user, err => (err ? next(err) : res.json(user)))
     }
