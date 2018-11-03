@@ -1,6 +1,6 @@
 import React, {Component} from 'react'
 import {connect} from 'react-redux'
-import {getProductsThunk} from '../store/products'
+import {getAllProductsThunk} from '../store/products'
 import {Link} from 'react-router-dom'
 import {addToCartButtonThunk, getCartProductsThunk} from '../store/cart'
 import axios from 'axios'
@@ -13,8 +13,7 @@ class ProductList extends Component {
   }
 
   componentDidMount() {
-    this.props.getProducts()
-    this.props.sessionCartId ? this.props.getCartProducts(this.props.sessionCartId) : null
+    this.props.displayAllProducts()
   }
 
   handleSubmit(event) {
@@ -44,9 +43,8 @@ class ProductList extends Component {
               <form
                 onSubmit={this.handleSubmit}
                 onClick={() => {
-                  // console.log('state on click', this.state)
-                  this.props.addCartButton(product.id, this.props.cartProducts)
-                  this.props.getCartProducts(this.props.sessionCartId)
+                  console.log('state on click', this.props)
+                  this.props.addCartButton(product)
                 }}
               >
                 <button type="submit">Add to cart</button>
@@ -59,17 +57,24 @@ class ProductList extends Component {
   }
 }
 
-const mapStateToProps = state => ({
-  products: state.products.all,
-  cartProducts: state.cart.products,
-  sessionCartId: state.cart.sessionCartId
-})
-
+const mapStateToProps = state => {
+  return {
+    products: state.products.all,
+    cartProducts: state.cart.products,
+    user: state.user
+  }
+}
+/*plan to add products to cart:
+1) click button
+2) use req.session.cart.id to find which cart
+3) put product into said cart
+*/
 const mapDispatchToProps = dispatch => ({
-  getProducts: () => dispatch(getProductsThunk()),
-  addCartButton: (productId, cart) =>
-    dispatch(addToCartButtonThunk(productId, cart)),
-  getCartProducts: cartId => dispatch(getCartProductsThunk(cartId))
+  displayAllProducts: () => dispatch(getAllProductsThunk()),
+  addCartButton: product => {
+    dispatch(addToCartButtonThunk(product))
+  }
+  // getCartProducts: cartId => dispatch(getCartProductsThunk(cartId))
 })
 
 const ConnectedProductList = connect(
