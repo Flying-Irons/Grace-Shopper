@@ -12,25 +12,25 @@ const users = [
     firstName: 'Bob',
     lastName: 'Builder',
     email: 'bob.builder@fullstack.com',
-    password: 'AlwaysBeCoding'
+    password: '123'
   },
   {
     firstName: 'Bill',
     lastName: 'Nye',
     email: 'Bill.Nye@fullstack.com',
-    password: 'BILLBILLBILL'
+    password: '123'
   },
   {
     firstName: 'Arthur',
     lastName: 'Read',
     email: 'arthur.read@fullstack.com',
-    password: 'AndISayHey'
+    password: '123'
   },
   {
     firstName: 'Curios',
     lastName: 'George',
     email: 'curios.george@fullstack.com',
-    password: 'GetDownFromThatTree'
+    password: '123'
   }
 ]
 
@@ -82,6 +82,9 @@ const seed = async () => {
       User.create(user)
     })
   )
+  // await Cart.create({
+
+  // })
 
   console.log(green('Seeding success!'))
   // db.close();

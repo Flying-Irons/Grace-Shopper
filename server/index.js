@@ -10,6 +10,7 @@ const sessionStore = new SequelizeStore({db})
 const PORT = process.env.PORT || 8080
 const app = express()
 const socketio = require('socket.io')
+const Cart = require('./db/models/cart')
 module.exports = app
 
 // This is a global Mocha hook, used for resource cleanup.
@@ -60,14 +61,24 @@ const createApp = () => {
       saveUninitialized: false
     })
   )
-  app.use((req, res, next) => {
-    // console.log(req.session)
-    if (!req.session.cartId) {
-      req.session.cartId = null
-    }
-    console.log(req.session)
-    next()
-  })
+
+  /**
+   * checkout will have many functions
+   * check if guest
+   * if not guest, send cartFunctions to email, and change cart boolean to true
+   * if guest, alert with email, send cartFunction to email, detete cart instance
+   */
+
+  // app.use(async (req, res, next) => {
+  //   //needs to find the latest cart by id
+  //   const allCarts = await Cart.findAndCountAll()
+  //   console.log('easdlfkjd', allCarts)
+
+  //   req.session.cart = await Cart.create({id: allCarts.count + 1})
+  //   req.session.user = 'guest'
+  //   console.log('I IS GUEST', req.session)
+  //   next()
+  // })
 
   app.use(passport.initialize())
   app.use(passport.session())

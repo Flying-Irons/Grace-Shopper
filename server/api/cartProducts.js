@@ -11,32 +11,46 @@ router.get('/', async (req, res, next) => {
   }
 })
 
-router.get('/session', (req, res, next) => {
+router.get('/findTheCart', async (req, res, next) => {
   try {
-    // console.log(req.session)
-    console.log('cartId', req.session.cartId)
-    const cartIdObj = {cartId: req.session.cartId}
-    res.send(cartIdObj)
+    console.log(req.session)
+    //try to find the product.id === productId,
+    //for cartId === cart.id
+    const cartById = await CartProduct.findAll({
+      where: {cartId: req.session.cart.id}
+    })
+    res.json(cartById)
   } catch (err) {
     next(err)
   }
 })
 
-router.post('/session', (req, res, next) => {
-  try {
-    req.session.cartId = req.body.cartId
-    console.log(req.session.cartId, '!!!!!')
-    res.send(req.session)
-  } catch (err) {
-    next(err)
-  }
-})
+// router.get('/session', (req, res, next) => {
+//   try {
+//     // console.log(req.session)
+//     console.log('cartId', req.session.cartId)
+//     const cartIdObj = {cartId: req.session.cartId}
+//     res.send(cartIdObj)
+//   } catch (err) {
+//     next(err)
+//   }
+// })
+
+// router.post('/session', (req, res, next) => {
+//   try {
+//     req.session.cartId = req.body.cartId
+//     console.log(req.session.cartId, '!!!!!')
+//     res.send(req.session)
+//   } catch (err) {
+//     next(err)
+//   }
+// })
 
 router.post('/', async (req, res, next) => {
   try {
     const newCartProduct = await CartProduct.create({
       productId: req.body.productId,
-      cartId: req.body.cartId,
+      cartId: req.session.cart.id,
       quantity: req.body.quantity
     })
     res.status(201).send(newCartProduct)
@@ -57,7 +71,6 @@ router.get('/:cartId', async (req, res, next) => {
   }
 })
 
-
 router.post('/', async (req, res, next) => {
   try {
     const newCartProduct = await CartProduct.create({
@@ -72,7 +85,6 @@ router.post('/', async (req, res, next) => {
   }
 })
 
-
 router.put('/:productId', async (req, res, next) => {
   try {
     const toBeModified = await CartProduct.findOne({
@@ -80,7 +92,6 @@ router.put('/:productId', async (req, res, next) => {
     })
 
     const updated = await toBeModified.update({
-
       productId: toBeModified.productId,
       cartId: toBeModified.cartId,
       quantity: req.body.quantity
