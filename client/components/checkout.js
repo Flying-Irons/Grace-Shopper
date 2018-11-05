@@ -3,15 +3,12 @@ import {connect} from 'react-redux'
 import {Link} from 'react-router-dom'
 import axios from 'axios'
 
-class PaymentPage extends Component {
+class CheckoutPage extends Component {
   constructor() {
     super()
     this.state = {
       email: '',
-      FullName: '',
-      CardNumber: '',
-      date: '',
-      CVC: ''
+      FullName: ''
     }
     this.handleChange = this.handleChange.bind(this)
   }
@@ -32,16 +29,10 @@ class PaymentPage extends Component {
         onSubmit={this.handleSubmit}
       >
         <script
-          src="https://checkout.stripe.com/checkout.js"
-          className="stripe-button"
-          data-key="pk_test_tqiGTL6uelH8qBGrgOUl0gmg"
-          data-amount="999"
-          data-name="Demo Site"
-          data-description="Example charge"
-          data-image="https://stripe.com/img/documentation/checkout/marketplace.png"
-          data-locale="auto"
+          src="https://js.stripe.com/v3/">
+        </script>
         />
-        {/* <span>Email</span>
+        <span>Email</span>
         <input
           name="email"
           value={this.state.email}
@@ -59,33 +50,18 @@ class PaymentPage extends Component {
           value={this.state.CardNumber}
           onChange={this.handleChange}
         />
-
-        <input
-          placeholder="MM/YY"
-          name="date"
-          value={this.state.date}
-          onChange={this.handleChange}
-        />
-        <input
-          placeholder="CVC"
-          name="CVC"
-          value={this.state.CVC}
-          onChange={this.handleChange}
-        />
         <button
           className="button-default"
           type="submit"
           disabled={
-            !this.state.FullName ||
-            !this.state.CardNumber ||
-            !this.state.date ||
-            !this.state.CVC
+            !this.state.email ||
+            !this.state.FullName
               ? true
               : false
           }
         >
           Submit
-        </button> */}
+        </button>
       </form>
     )
   }
