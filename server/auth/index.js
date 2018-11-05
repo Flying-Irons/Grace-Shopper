@@ -7,7 +7,9 @@ module.exports = router
 /* HELPER FUNCTIONS*/
 async function cartCheckOnLogin(req, res, next, user) {
   //look for all the cart
-  const doesCartExist = await Cart.findOne({userId: user.id})
+
+  console.log('!!!!! this is the user.id', user.id)
+  const doesCartExist = await Cart.findOne({where: {userId: user.id}})
   console.log('whats in here?', doesCartExist)
   let cartToSession
   if (!doesCartExist) {
@@ -15,18 +17,17 @@ async function cartCheckOnLogin(req, res, next, user) {
 
     cartToSession = await Cart.create({userId: user.id})
   } else {
-    //THE CART EXIST SO SET STATE TO EXISTING CART
+    //THE CART EXIST SO SET SESSION WITH EXISTING CART
 
     cartToSession = await Cart.findOne({
       id: doesCartExist.id,
       purchased: false
     })
   }
-
   //ADD EVERYTHING to session
-  req.session.cart = cartToSession
+  req.session.cartId = cartToSession.id
   req.session.user = user
-  console.log(req.session)
+  console.log('THIS IS THE REQ.SESSION', req.session)
   req.login(user, err => (err ? next(err) : res.json(user)))
 }
 

@@ -102,17 +102,24 @@ const updateCart = product => ({type: UPDATE_CART, product})
 1) If no product.id === productId for cartId === cart.id, add a product
 2) If there is a product, quantity++
 */
-export const addToCartButtonThunk = product => {
+export const addToCartButtonThunk = (product, user) => {
   return async dispatch => {
     try {
-      console.log('helo')
+      // if (user === 'guest') {
+      //   //create cart FOR guest
+      // } else {
+      //   //find the cart and product stuff
+      // }
+
       const findTheCart = await axios.get('/api/cartProducts/findTheCart')
+
       const isThereProduct = findTheCart.data.filter(productInCart => {
         return productInCart.productId === product.id
       })
 
       if (!isThereProduct.length) {
         //if there isn't, add product
+        console.log('problem1?!!!!!')
         const newProductInCartResponse = await axios.post('/api/cartProducts', {
           productId: product.id,
           cartId: `doesn't matter`,
@@ -120,6 +127,7 @@ export const addToCartButtonThunk = product => {
         })
         // dispatch(newProductInCartResponse)
       } else {
+        console.log('problem2!!!!')
         const updated = await axios.put(`/api/cartProducts/${product.id}`, {
           quantity: isThereProduct[0].quantity + 1
         })

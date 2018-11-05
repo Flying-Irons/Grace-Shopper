@@ -7,6 +7,11 @@ const Cart = db.define('cart', {
     defaultValue: false,
     allowNull: false
   }
+  // isDefault:{
+  //   type: Sequelize.BOOLEAN,
+  //   devfaultvalue: false,
+  //   allowNull: false
+  // }
 })
 
 module.exports = Cart

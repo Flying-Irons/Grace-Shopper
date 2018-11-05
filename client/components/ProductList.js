@@ -44,7 +44,7 @@ class ProductList extends Component {
                 onSubmit={this.handleSubmit}
                 onClick={() => {
                   console.log('state on click', this.props)
-                  this.props.addCartButton(product)
+                  this.props.addCartButton(product, this.props.user)
                 }}
               >
                 <button type="submit">Add to cart</button>
@@ -71,8 +71,8 @@ const mapStateToProps = state => {
 */
 const mapDispatchToProps = dispatch => ({
   displayAllProducts: () => dispatch(getAllProductsThunk()),
-  addCartButton: product => {
-    dispatch(addToCartButtonThunk(product))
+  addCartButton: (product, user) => {
+    dispatch(addToCartButtonThunk(product, user))
   }
   // getCartProducts: cartId => dispatch(getCartProductsThunk(cartId))
 })
