@@ -26,11 +26,10 @@ class Cart extends Component {
 
   componentDidMount() {
     // this.props.getSession() // state.cart.sessionCartId exists
-
-    this.props.populateCart(this.props.cartId) //now state.cart.products is correct.
+    console.log('thispropscartId at time of mount', this.props.cartId)
+    this.props.cartId > 0 && this.props.populateCart(this.props.cartId) //now state.cart.products is correct.
 
     this.calculateQuantity()
-
   }
 
   calculateQuantity() {
@@ -42,9 +41,9 @@ class Cart extends Component {
         )[0].price *
           current.quantity
       )
-      }, 0)
+    }, 0)
     this.setState({total})
-    }
+  }
 
   render() {
     if (!this.props.products.length) {
@@ -123,22 +122,15 @@ class Cart extends Component {
                   </tr>
                 )
               })}
-
-            {/* {this.state.productTemps.map((product, idx) => {
-            return (
-              <tr>
-              <td>{product.name}</td>
-              <td>{product.price}</td>
-              <td>{this.props.products[idx].quantity}</td>
-              </tr>
-              )
-            })} */}
           </table>
           <div>
-            Total:{this.state.total}
+            Total:
+            {this.state.total}
           </div>
           <button>
-            <Link to={{ pathname: "/checkout", total: this.state.total}}>Checkout</Link>
+            <Link to={{pathname: '/checkout', total: this.state.total}}>
+              Checkout
+            </Link>
           </button>
         </div>
       )

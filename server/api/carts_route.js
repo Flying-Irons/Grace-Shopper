@@ -1,5 +1,5 @@
 const router = require('express').Router()
-// const { models } = require('sequelize') 
+// const { models } = require('sequelize')
 module.exports = router
 const {Cart, CartProduct} = require('../db/models')
 const stripe = require('stripe')('sk_test_lwbYoF0OG9a1rULY519kOozL')
@@ -16,12 +16,37 @@ router.get('/', async (req, res, next) => {
 router.post('/', async (req, res, next) => {
   try {
     const newCart = await Cart.create()
+
     res.status(201).send(newCart)
   } catch (err) {
     next(err)
   }
 })
 
+router.post('/:userId', async (req, res, next) => {
+  try {
+    console.log('post being hit')
+    const newCart = await Cart.create({userId: req.body.userId})
+    res.status(201).send(newCart)
+  } catch (err) {
+    next(err)
+  }
+})
+
+router.put('/:id', async (req, res, next) => {
+  try {
+    const toBeUpdatedCart = await Cart.findOne({
+      where: {id: req.params.id}
+    })
+
+    const updatedCart = await toBeUpdatedCart.update({
+      purchased: req.body.purchased
+    })
+    res.sendStatus(201)
+  } catch (err) {
+    next(err)
+  }
+})
 router.post('/stripe', async (req, res, next) => {
   try {
     console.log(req.body.tokenId)
