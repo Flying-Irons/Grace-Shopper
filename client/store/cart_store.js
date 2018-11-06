@@ -225,7 +225,7 @@ export const decrementQuantityThunk = (productId, cartId, quantity) => {
 const CartReducer = (state = initialState, action) => {
   switch (action.type) {
     case GET_CART_PRODUCTS:
-      return {...state, products: action.products}
+      return {...state, products: [...action.products]}
     case ADD_TO_CART:
       return {...state, products: [...state.products, action.product]}
     case UPDATE_CART:
