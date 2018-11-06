@@ -12,6 +12,7 @@ import './socket'
 ReactDOM.render(
   <Provider store={store}>
     <Router history={history}>
+      {/* <script src="https://js.stripe.com/v3/"></script> */}
       <App />
     </Router>
   </Provider>,
