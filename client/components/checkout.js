@@ -56,7 +56,7 @@ class CheckoutPage extends React.Component {
         cartId: newCart.data.id
       })
       console.log('new session id', newSession)
-      this.props.history.push('/products')
+      this.props.history.push('/checked_out_page')
     } catch (err) {
       console.log(err)
     }
