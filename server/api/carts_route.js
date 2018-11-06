@@ -2,6 +2,7 @@ const router = require('express').Router()
 // const { models } = require('sequelize') 
 module.exports = router
 const {Cart, CartProduct} = require('../db/models')
+const stripe = require('stripe')('sk_test_lwbYoF0OG9a1rULY519kOozL')
 
 router.get('/', async (req, res, next) => {
   try {
@@ -21,4 +22,18 @@ router.post('/', async (req, res, next) => {
   }
 })
 
+router.post('/stripe', async (req, res, next) => {
+  try {
+    console.log(req.body.tokenId)
+    let {status} = await stripe.charges.create({
+      amount: 4000,
+      currency: 'usd',
+      source: req.body.tokenId
+    })
 
+    console.log(status)
+    res.json({status})
+  } catch (err) {
+    next(err)
+  }
+})

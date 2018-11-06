@@ -8,9 +8,23 @@ import ProductList from './components/ProductList'
 import SingleProduct from './components/SingleProduct'
 import AddProduct from './components/addProduct'
 import Cart from './components/Cart'
+import Checkout from './components/checkout'
+import {StripeProvider, Elements} from 'react-stripe-elements'
+
 /**
  * COMPONENT
  */
+class StripeFormComponent extends Component {
+  render() {
+    return (
+      <StripeProvider apiKey='pk_test_5B0zuPIGjKtZN850A2UUx5Xt'>
+        <Elements>
+          <Checkout />
+        </Elements>
+      </StripeProvider>
+    )
+  }
+}
 class Routes extends Component {
   componentDidMount() {
     this.props.loadInitialData()
@@ -29,7 +43,12 @@ class Routes extends Component {
         <Route exact path="/products/:id" component={SingleProduct} />
         <Route path="/addproduct" component={AddProduct} />
         <Route path="/cart" component={Cart} />
-
+        {/* <StripeProvider apiKey='pk_test_5B0zuPIGjKtZN850A2UUx5Xt'>
+         <Elements>
+          <Route path="/checkout" component={Checkout} />
+         </Elements>
+        </StripeProvider>         */}
+        <Route path="/checkout" component={StripeFormComponent} />
         {isLoggedIn && (
           <Switch>
             <Route path="/home" component={ProductList} />
