@@ -11,7 +11,7 @@ import Typography from '@material-ui/core/Typography'
 const Navbar = ({handleClick, isLoggedIn}) => (
   <div className="header-nav">
     <div>
-      <h1>Iron Flown Grocery</h1>
+      <h1>Iron Flown Bazaar</h1>
     </div>
     <nav>
       {isLoggedIn ? (
