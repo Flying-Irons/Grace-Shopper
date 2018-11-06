@@ -15,7 +15,10 @@ import axios from 'axios'
 class Cart extends Component {
   constructor(props) {
     super(props)
-
+    this.state = {
+      total: 0
+    }
+    this.calculateQuantity = this.calculateQuantity.bind(this)
     // this.getCartId = this.getCartId.bind(this)
     // this.getProductInfo = this.getProductInfo.bind(this)
     // this.populatesState = this.populatesState.bind(this)
@@ -25,32 +28,25 @@ class Cart extends Component {
     // this.props.getSession() // state.cart.sessionCartId exists
 
     this.props.populateCart(this.props.cartId) //now state.cart.products is correct.
+
+    this.calculateQuantity()
+
   }
 
-  // async getCartId() {
-  //   const cartIdObj = await axios.get('/api/cartProducts/session')
-  //   const cartId = cartIdObj.data.cartId
-  //   return cartId
-  // }
-
-  // async getProductInfo(productId) {
-  //   const productObj = await axios.get(`/api/products/${productId}`)
-  //   const product = productObj.data
-  //   return product
-  // }
-
-  // async populatesState() {
-  //   const resultingProducts = this.props.products.map(async product => {
-  //     const singleProduct = await this.getProductInfo(product.productId)
-  //     console.log('singleProduct', singleProduct)
-  //     this.setState({productTemps: [...this.state.productTemps, singleProduct]})
-  //   })
-  //   console.log('CurrentState:', this.state)
-  // }
+  calculateQuantity() {
+    const total = this.props.products.reduce((acc, current) => {
+      return (
+        acc +
+        this.props.allProducts.filter(
+          product => product.id === current.productId
+        )[0].price *
+          current.quantity
+      )
+      }, 0)
+    this.setState({total})
+    }
 
   render() {
-    console.log('prop.products', this.props.products)
-    console.log('our props from redux store', this.props)
     if (!this.props.products.length) {
       return (
         <div className="cart">
@@ -139,17 +135,11 @@ class Cart extends Component {
             })} */}
           </table>
           <div>
-            Total:
-            {this.props.products.reduce((acc, current) => {
-              return (
-                acc +
-                this.props.allProducts.filter(
-                  product => product.id === current.productId
-                )[0].price *
-                  current.quantity
-              )
-            }, 0)}
+            Total:{this.state.total}
           </div>
+          <button>
+            <Link to={{ pathname: "/checkout", total: this.state.total}}>Checkout</Link>
+          </button>
         </div>
       )
     }

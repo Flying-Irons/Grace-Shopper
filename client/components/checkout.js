@@ -32,6 +32,7 @@ class CheckoutPage extends React.Component {
 
   }
   render() {
+    console.log('here is the total prop, to be passed to stripe', this.props.location.total)
     return (
       <div>
         <form
