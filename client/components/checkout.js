@@ -34,14 +34,13 @@ class CheckoutPage extends React.Component {
       })
 
       await axios.post('/api/carts/stripe', {
-        tokenId: responseObj.token.id, 
+        tokenId: responseObj.token.id,
         amount: this.props.location.total
       })
       //axios.put to update cart purchased: true
       await axios.put(`/api/carts/${this.props.sessionCartId}`, {
         purchased: true
       })
-
 
       //axios.post to create new cart
       //we have current user id in state.user.id
@@ -60,7 +59,6 @@ class CheckoutPage extends React.Component {
     }
   }
   render() {
-
     return (
       <div>
         <form
