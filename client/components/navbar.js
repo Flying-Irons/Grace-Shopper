@@ -34,6 +34,9 @@ const Navbar = ({handleClick, isLoggedIn}) => (
                 <Button component={Link} to="/cart">
                   Cart
                 </Button>
+                <Button component={Link} to="/checkOrder">
+                  Order History
+                </Button>
               </Typography>
             </ToolBar>
           </AppBar>
@@ -55,6 +58,9 @@ const Navbar = ({handleClick, isLoggedIn}) => (
                 </Button>
                 <Button component={Link} to="/cart">
                   Cart
+                </Button>
+                <Button component={Link} to="/checkOrder">
+                  Order History
                 </Button>
               </Typography>
             </ToolBar>

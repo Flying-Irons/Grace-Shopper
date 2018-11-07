@@ -1,5 +1,6 @@
 import axios from 'axios'
 import {AvQueuePlayNext} from 'material-ui/svg-icons'
+import email from '../../node_modules/material-ui/svg-icons/communication/email';
 
 /**
  * ACTION TYPES
@@ -9,6 +10,8 @@ const ADD_TO_CART = 'ADD_TO_CART'
 const UPDATE_CART = 'UPDATE_CART'
 const GET_SESSION_CART_ID = 'GET_SESSION_CART_ID'
 const REMOVE_ITEM = 'REMOVE_ITEM'
+const CHECK_ORDER = 'CHECK_ORDER'
+const EMPTY_CART_PRODUCTS = 'EMPTY_CART_PRODUCTS'
 /**
  * INITIAL STATE
  */
@@ -21,8 +24,11 @@ const initialState = {products: [], sessionCartId: 0}
 const getCartProducts = products => ({type: GET_CART_PRODUCTS, products})
 const addToCart = product => ({type: ADD_TO_CART, product})
 const updateCart = product => ({type: UPDATE_CART, product})
-const getSessionCartId = cartId => ({type: GET_SESSION_CART_ID, cartId})
+//we do indeed need this action creator in another file!!
+export const getSessionCartId = cartId => ({type: GET_SESSION_CART_ID, cartId})
 const removeItem = id => ({type: REMOVE_ITEM, id})
+const checkOrder = products => ({type: CHECK_ORDER, products})
+export const emptyCartProducts = () => ({type: EMPTY_CART_PRODUCTS})
 /*
  HELPING FUNCTIONS
  */
@@ -218,6 +224,20 @@ export const decrementQuantityThunk = (productId, cartId, quantity) => {
   }
 }
 
+//check an order
+
+export const checkOrderThunk = (email, cartId) => {
+  return async dispatch => {
+    try {
+      const {data} = await axios.get(`/api/checkOrder/${email}/${cartId}`)
+      dispatch(checkOrder(data))
+    } catch (err) {
+      console.log(err)
+    }
+  }
+}
+
+
 /**
  * REDUCER
  */
@@ -245,6 +265,10 @@ const CartReducer = (state = initialState, action) => {
           product => product.productId !== action.id
         )
       }
+    case CHECK_ORDER:
+      return {...state, products: action.products}
+    case EMPTY_CART_PRODUCTS:
+      return {...state, products: []}
     default:
       return state
   }

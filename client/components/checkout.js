@@ -24,15 +24,16 @@ class CheckoutPage extends React.Component {
         name: this.state.FullName, 
         email: this.state.email
       })
-      console.log(responseObj.token.id)
-      await axios.post('/api/carts/stripe', {tokenId: responseObj.token.id})
+      await axios.post('/api/carts/stripe', {
+        tokenId: responseObj.token.id,
+        amount: this.props.location.total
+      })
     } catch(err) {
       console.log(err)
     }
 
   }
   render() {
-    console.log('here is the total prop, to be passed to stripe', this.props.location.total)
     return (
       <div>
         <form

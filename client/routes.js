@@ -10,6 +10,7 @@ import AddProduct from './components/addProduct'
 import Cart from './components/Cart'
 import Checkout from './components/checkout'
 import {StripeProvider, Elements} from 'react-stripe-elements'
+import OrderHistory from './components/orderHistory'
 
 /**
  * COMPONENT
@@ -33,6 +34,7 @@ class Routes extends Component {
         <Route exact path="/products/:id" component={SingleProduct} />
         <Route path="/addproduct" component={AddProduct} />
         <Route path="/cart" component={Cart} />
+        <Route path="/checkOrder" component={OrderHistory} />
         <StripeProvider apiKey='pk_test_5B0zuPIGjKtZN850A2UUx5Xt'>
          <Elements>
           <Route path="/checkout" component={Checkout} />
