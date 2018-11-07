@@ -36,22 +36,16 @@ class Routes extends Component {
         <Route path="/addproduct" component={AddProduct} />
         <Route path="/cart" component={Cart} />
         <Route path="/checkOrder" component={OrderHistory} />
-        <StripeProvider apiKey='pk_test_5B0zuPIGjKtZN850A2UUx5Xt'>
-         <Elements>
-          <Route path="/checkout" component={Checkout} />
-         </Elements>
-        </StripeProvider>        
         <Route path="/checked_out_page" component={CheckedOutPage} />
+
+        <Route path="/home" component={ProductList} />
+
         <StripeProvider apiKey="pk_test_5B0zuPIGjKtZN850A2UUx5Xt">
           <Elements>
             <Route path="/checkout" component={Checkout} />
           </Elements>
         </StripeProvider>
-        {isLoggedIn && (
-          <Switch>
-            <Route path="/home" component={ProductList} />
-          </Switch>
-        )}
+
         {/* Displays our Login component as a fallback */}
         {/* <Route component={Login} /> */}
       </Switch>
