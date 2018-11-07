@@ -25,7 +25,6 @@ router.get('/:cartId', async (req, res, next) => {
 router.post('/', async (req, res, next) => {
   try {
     const newCart = await Cart.create()
-
     res.status(201).send(newCart)
   } catch (err) {
     next(err)
@@ -47,9 +46,9 @@ router.put('/:id', async (req, res, next) => {
     const toBeUpdatedCart = await Cart.findOne({
       where: {id: req.params.id}
     })
-
     const updatedCart = await toBeUpdatedCart.update({
-      purchased: req.body.purchased
+      purchased: req.body.purchased || toBeUpdatedCart.purchased,
+      userId: req.body.userId || toBeUpdatedCart.userId
     })
     res.sendStatus(201)
   } catch (err) {

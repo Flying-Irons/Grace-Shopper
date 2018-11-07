@@ -20,4 +20,14 @@ router.get('/', () => {
   }
 })
 
+router.post('/', async (req, res, next) => {
+  try {
+    const user = await User.create({
+      email: req.body.email
+    })
+    res.send(user)
+  } catch(err) {
+    next(err)
+  }
+})
 
