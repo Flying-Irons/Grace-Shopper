@@ -37,6 +37,16 @@ class CheckoutPage extends React.Component {
         tokenId: responseObj.token.id,
         amount: this.props.location.total
       })
+
+      //lets check if this cart has a userId,
+      //if not, we make an anonymous user and give it one!
+      const thisCartObj = await axios.get(`/api/carts/${this.props.sessionCartId}`)
+      const thisCart = thisCartObj.data
+      if (!thisCart.userId) {
+        const newUserObj = await axios.post('/api/users', {email: this.state.email})
+        await axios.put(`/api/carts/${this.props.sessionCartId}`, {userId: newUserObj.data.id})
+      }
+      
       //axios.put to update cart purchased: true
       await axios.put(`/api/carts/${this.props.sessionCartId}`, {
         purchased: true

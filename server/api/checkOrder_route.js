@@ -14,8 +14,7 @@ router.get('/:email/:cartId', async (req, res, next) => {
     const user = await User.findOne({
       where: {email: req.params.email}
     })
-    //add && cart.purchased
-    if (user.id === cart.userId) {
+    if (user.id === cart.userId && cart.purchased) {
       res.send(orderedProducts)
     }
     else {
