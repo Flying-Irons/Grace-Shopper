@@ -13,6 +13,15 @@ router.get('/', async (req, res, next) => {
   }
 })
 
+router.get('/:cartId', async (req, res, next) => {
+  try {
+    const singleCart = await Cart.findById(req.params.cartId)
+    res.status(200).send(singleCart)
+  } catch(err) {
+    next(err)
+  }
+})
+
 router.post('/', async (req, res, next) => {
   try {
     const newCart = await Cart.create()
@@ -49,9 +58,9 @@ router.put('/:id', async (req, res, next) => {
 })
 router.post('/stripe', async (req, res, next) => {
   try {
-    console.log(req.body.tokenId)
+    console.log(req.body)
     let {status} = await stripe.charges.create({
-      amount: 4000,
+      amount: req.body.amount*100,
       currency: 'usd',
       source: req.body.tokenId
     })

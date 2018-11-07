@@ -32,17 +32,16 @@ class CheckoutPage extends React.Component {
         name: this.state.FullName,
         email: this.state.email
       })
-      console.log('token', responseObj.token.id)
-      await axios.post('/api/carts/stripe', {tokenId: responseObj.token.id})
 
-      console.log('this.props.userId', this.props.userId)
-      console.log('thispropssessioncartId', this.props.sessionCartId)
+      await axios.post('/api/carts/stripe', {
+        tokenId: responseObj.token.id, 
+        amount: this.props.location.total
+      })
       //axios.put to update cart purchased: true
       await axios.put(`/api/carts/${this.props.sessionCartId}`, {
         purchased: true
       })
 
-      console.log('this.props.userId post put', this.props.userId)
 
       //axios.post to create new cart
       //we have current user id in state.user.id
@@ -50,19 +49,18 @@ class CheckoutPage extends React.Component {
         userId: this.props.userId
       })
 
-      console.log('return of newcart', newCart)
       //set new req.session.cartId
       const newSession = await axios.post(`/api/cartProducts/session`, {
         cartId: newCart.data.id
       })
-      console.log('new session id', newSession)
+
       this.props.history.push('/checked_out_page')
     } catch (err) {
       console.log(err)
     }
   }
   render() {
-    console.log('state user', this.props.userId)
+
     return (
       <div>
         <form
