@@ -9,6 +9,7 @@ import SingleProduct from './components/SingleProduct'
 import AddProduct from './components/addProduct'
 import Cart from './components/Cart'
 import Checkout from './components/checkout'
+import CheckedOutPage from './components/CheckedOut'
 import {StripeProvider, Elements} from 'react-stripe-elements'
 import OrderHistory from './components/orderHistory'
 
@@ -40,6 +41,12 @@ class Routes extends Component {
           <Route path="/checkout" component={Checkout} />
          </Elements>
         </StripeProvider>        
+        <Route path="/checked_out_page" component={CheckedOutPage} />
+        <StripeProvider apiKey="pk_test_5B0zuPIGjKtZN850A2UUx5Xt">
+          <Elements>
+            <Route path="/checkout" component={Checkout} />
+          </Elements>
+        </StripeProvider>
         {isLoggedIn && (
           <Switch>
             <Route path="/home" component={ProductList} />
