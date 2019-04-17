@@ -7,9 +7,9 @@ const requireAuthorization = (req, res, next, method, check) => {
         next()
       }
     case 'cartId':
-      console.log('hello', check, req.session.cartId)
+      // console.log('hello', check, req.session.cartId)
       if (req.session.cartId !== check) {
-        console.log('why are we in here????????')
+        // console.log('why are we in here????????')
         res.send(401, 'Unauthorized')
       }
     default:

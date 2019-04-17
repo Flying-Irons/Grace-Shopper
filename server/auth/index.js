@@ -29,7 +29,7 @@ async function cartCheckOnLogin(req, res, next, user) {
   //ADD EVERYTHING to session
   req.session.cartId = cartToSession.id
 
-  console.log('THIS IS THE REQ.SESSION', req.session)
+  // console.log('THIS IS THE REQ.SESSION', req.session)
   req.login(
     user,
     err =>
