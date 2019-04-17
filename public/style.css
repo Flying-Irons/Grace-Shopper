@@ -1,5 +1,6 @@
 body {
   font-family: sans-serif;
+  background-color: #34455b;
 }
 
 a {
@@ -69,3 +70,12 @@ form div {
   flex-direction: column;
   justify-content: center;
 }
+
+.header-title {
+  font-family: 'El Messiri', sans-serif;
+  font-size: 2.25vw;
+  color: #f1eddc;
+}
+/* .app-page {
+  background-color: #656663;
+} */

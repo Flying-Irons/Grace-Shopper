@@ -7,7 +7,7 @@ const passport = require('passport')
 const SequelizeStore = require('connect-session-sequelize')(session.Store)
 const db = require('./db')
 const sessionStore = new SequelizeStore({db})
-const PORT = process.env.PORT || 8080
+const PORT = process.env.PORT || 8081
 const app = express()
 const socketio = require('socket.io')
 module.exports = app
@@ -65,7 +65,7 @@ const createApp = () => {
     if (!req.session.cartId) {
       req.session.cartId = null
     }
-    console.log(req.session)
+    // console.log(req.session)
     next()
   })
 

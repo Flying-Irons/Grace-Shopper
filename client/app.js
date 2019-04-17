@@ -5,8 +5,11 @@ import Routes from './routes'
 
 const App = () => {
   return (
-    <div>
-      <Navbar />
+    <div className="app-page">
+      <div className="header-title">
+        <h1>FLYING IRON BAZAAR</h1>
+      </div>
+      <Navbar className="navbar" />
       <Routes />
     </div>
   )

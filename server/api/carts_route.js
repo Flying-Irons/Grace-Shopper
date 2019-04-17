@@ -3,6 +3,7 @@ const router = require('express').Router()
 module.exports = router
 const {Cart, CartProduct} = require('../db/models')
 const stripe = require('stripe')('sk_test_lwbYoF0OG9a1rULY519kOozL')
+const authorization = require('../middleware/authorizationLevel')
 
 router.get('/', async (req, res, next) => {
   try {
@@ -13,12 +14,14 @@ router.get('/', async (req, res, next) => {
   }
 })
 
-router.get('/:cartId', async (req, res, next) => {
+router.get('/:cartId', authorization, async (req, res, next) => {
   try {
+    console.log('went into the route page of carts')
+    authorization(req, res, next, 'cartId', req.params.cartId)
     const singleCart = await Cart.findById(req.params.cartId)
     res.status(200).send(singleCart)
-  } catch(err) {
-    next(err)
+  } catch (err) {
+    console.log(err)
   }
 })
 
@@ -59,7 +62,7 @@ router.post('/stripe', async (req, res, next) => {
   try {
     console.log(req.body)
     let {status} = await stripe.charges.create({
-      amount: req.body.amount*100,
+      amount: req.body.amount * 100,
       currency: 'usd',
       source: req.body.tokenId
     })

@@ -9,10 +9,12 @@ async function cartCheckOnLogin(req, res, next, user) {
   //look for all the cart
 
   console.log('!!!!! this is the user.id', user.id)
-  const doesCartExist = await Cart.findOne({where: {
-    userId: user.id,
-    purchased: false
-  }})
+  const doesCartExist = await Cart.findOne({
+    where: {
+      userId: user.id,
+      purchased: false
+    }
+  })
   console.log('whats in here?', doesCartExist)
   let cartToSession
   if (!doesCartExist) {
@@ -26,11 +28,18 @@ async function cartCheckOnLogin(req, res, next, user) {
   }
   //ADD EVERYTHING to session
   req.session.cartId = cartToSession.id
-  console.log('THIS IS THE REQ.SESSION', req.session)
-  req.login(user, err => (err ? next(err) : res.json({
+
+  // console.log('THIS IS THE REQ.SESSION', req.session)
+  req.login(
     user,
-    cartId: cartToSession.id
-  })))
+    err =>
+      err
+        ? next(err)
+        : res.json({
+            user,
+            cartId: cartToSession.id
+          })
+  )
 }
 
 router.post('/login', async (req, res, next) => {
